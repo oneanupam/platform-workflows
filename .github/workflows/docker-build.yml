@@ -1,0 +1,24 @@
+# GitHub workflow to create container image and tag it with the Git SHA and run number.
+name: Build docker image
+
+on:
+  workflow_call:
+    inputs:
+      hash_value:
+        description: 'An identifier to be added to the docker image tag'
+        type: string
+        required: true
+        default: 'xxxxx'
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: |
+            ghcr.io/${{ github.repository }}/eapp:release-${{ github.run_number }}-${{ inputs.hash_value }}
+          outputs: type=docker,dest=/tmp/eapp.tar

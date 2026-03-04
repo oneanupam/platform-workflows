@@ -1,0 +1,27 @@
+# GitHub workflow to install Terraform CLI.
+name: Install Terraform CLI
+
+on:
+  workflow_call:
+    inputs:
+      terraform_version:
+        description: 'Version of Terraform CLI to install'
+        type: string
+        required: true
+        default: '1.14.0'
+
+jobs:
+  install-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      # Install the specified version of Terraform CLI
+      - name: Terraform Installation
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      # Verify the installed version of Terraform CLI
+      - name: Verify Terraform Version
+        run: |
+          terraform version
+        shell: bash
