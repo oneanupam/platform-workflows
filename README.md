@@ -1,56 +1,50 @@
-# Terraform EIP Module
+# Platform Workflows
 
-This module creates an External Compute Address resource on Google Cloud Platform.
+This repository contains reusable GitHub Actions workflows that can be consumed by other repositories to standardize CI/CD pipelines. The goal of this repository is to provide centralized workflow definitions so that multiple repositories can reuse the same CI/CD logic without duplicating workflow code.
 
 ## Prerequisites
 
-Below prerequisites must be fulfilled for successful execution of terraform concept code sets.
+To use the workflows defined in this repository, ensure the following:
 
-### Software Requirement
+- GitHub repository with GitHub Actions enabled
+- Required secrets configured in the calling repository
+- Access permissions to reference workflows from this repository
 
-Resources in this repository are meant to use with Terraform 1.14.0 (check the terraform version using: `terraform version`). If you don't have the compatible version, download it from official Terraform repository.
+## Repo Layout
 
-- [Terraform](https://www.terraform.io/downloads.html) >= 1.14.0
-- [Terraform Provider for GCP](https://github.com/terraform-providers/terraform-provider-google) >= 7.21.0
-- [Terraform Provider for GCP Beta](https://github.com/terraform-providers/terraform-provider-google-beta) >= 7.21.0
-- [gcloud](https://cloud.google.com/sdk/gcloud/) > 548.0.0
+At a high level, these folders make up the `github.com/oneanupam/app-repo-template` repository.
 
-> **Note:**
-> See [Installation-Guide](https://gist.github.com/oneanupam/7458df6506e8e3cfb28c0ff56fab546a) on how to install Terraform.
+- [`.github/`](./.github) - This directory contains reusable GitHub Actions workflows that can be invoked by other repositories using workflow_call.
+- [`.vscode/`](./.vscode) - It contains project-specific settings and configurations to customize how VS Code behaves for the workspace.
+- [`docs/`](./docs) - This folder contains the documentations related to the repository.
+- [`examples/`](./examples) - This folder contains the examples to use the reusable workflows.
+- [`.pre-commit-config.yaml`](.pre-commit-config.yaml) - This file contains the plugin configuration for pre-commit.
+- [`.editorconfig`](.editorconfig) - This file has the configuration for the editorconfig plugin.
 
-### API Requirement
+## How to run pre-commit
 
-In order to deploy the VPC using this module, you must activate the Compute Engine API on the project.
-
-- Compute Engine API - compute.googleapis.com
-
-## Example Usage
-
-```bash
-module "example-eip" {
-  source = "oneanupam/eip/google"
-
-  project      = var.project_id
-  name         = var.address_name
-  address_type = "EXTERNAL"
-  region       = var.region
-  network_tier = var.network_tier
-}
-```
-
-Then perform the following commands on the root folder:
-
-- [Required] `terraform init` # To initialize the terraform working directory.
-- [Optional] `terraform validate` # To validate the terraform configuration.
-- [Optional] `terraform fmt` # To format the terraform configuration to a canonical format and style.
-- [Optional] `terraform plan` # To create an execution plan for terraform configuration files.
-- [Required] `terraform apply -auto-approve` # To execute the actions proposed in a terraform plan to create, update, or destroy infrastructure.
-- [Optional] `terraform destroy -auto-approve` # To destroy the created infrastructure. Specific resources can be destroyed using resource targeting.
-
-## Testing
-
-Unit testing and Integration testing for terraform modules can be done using terraform testing framework. This terraform module uses terraform test.
+Run the below commnad from the git repo root to set up the git hook scripts into your git hooks. It will be installed at .git/hooks/pre-commit
 
 ```bash
-    `terraform test` # runs the test cases sequentially
+pre-commit install
 ```
+
+Now, pre-commit will run automatically on git commit. Usually, it runs only for the changed files. Its good to run the hooks against all the files when adding new hooks. To manually run all pre-commit hooks on a repo, use below -
+
+```bash
+# to run hooks on all files
+pre-commit run --all-files
+
+# to run individual hook
+pre-commit run <hook_id>
+```
+
+Once you have pre-commit installed, adding pre-commit plugins to your project is done with the .pre-commit-config.yaml configuration file. You can generate a very basic configuration using `pre-commit sample-config`. Every time you clone a project using pre-commit running pre-commit install should always be the first thing you do.
+
+## Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for improvements or new suggestions. Read the [contributing.md](CONTRIBUTING.md) before starting.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
