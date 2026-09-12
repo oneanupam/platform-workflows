@@ -21,19 +21,23 @@ At a high level, these folders make up the `github.com/oneanupam/app-repo-templa
 - [`.pre-commit-config.yaml`](.pre-commit-config.yaml) - This file contains the plugin configuration for pre-commit.
 - [`.editorconfig`](.editorconfig) - This file has the configuration for the editorconfig plugin.
 
-## How to run pre-commit
-
-Run the below commnad from the git repo root to set up the git hook scripts into your git hooks. It will be installed at .git/hooks/pre-commit
+## Run pre-commit
+The pre-commit framework is a powerful, language-agnostic tool for managing Git hooks. Create a .pre-commit-config.yaml file in the root of your repository. Run the below commnad from the git repo root to set up the git hook scripts into your git hooks. It will be installed at .git/hooks/pre-commit
 
 ```bash
 pre-commit install
+pre-commit install --config <file> # If config file has non-standard name
+pre-commit validate-config # Validate .pre-commit-config.yaml files
 ```
 
-Now, pre-commit will run automatically on git commit. Usually, it runs only for the changed files. Its good to run the hooks against all the files when adding new hooks. To manually run all pre-commit hooks on a repo, use below -
+now pre-commit will run automatically on git commit. Usually, it runs only for the changed files. Its good to run the hooks against all the files when adding new hooks. To manually run all pre-commit hooks on a repo, use below -
 
 ```bash
 # to run hooks on all files
 pre-commit run --all-files
+
+# to run hooks on all files using a non-standard naming config file
+pre-commit run --all-files --config .pre-commit-config-old.yaml
 
 # to run individual hook
 pre-commit run <hook_id>
