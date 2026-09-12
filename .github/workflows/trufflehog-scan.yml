@@ -1,0 +1,33 @@
+name: TruffleHog Scan
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Generated Tag Value
+        required: true
+        type: string
+      metadata:
+        description: Generated Metadata Value
+        required: true
+        type: string
+
+jobs:
+  trufflehog_scan:
+    name: TruffleHog Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Display Metadata
+        run: |
+          echo "Tag Value: ${{ inputs.tag }}"
+          echo "Metadata: ${{ inputs.metadata }}"
+
+      - name: TruflleHog Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --results=verified,unknown

@@ -1,0 +1,53 @@
+name: Metadata
+on:
+  workflow_call:
+    outputs:
+      tag:
+        description: Generated tag value
+        value: ${{ jobs.get_metadata.outputs.tag }}
+      metadata:
+        description: Generated metadata
+        value: ${{ jobs.get_metadata.outputs.metadata }}
+
+env:
+  BUSINESS_UNIT: foundations
+
+jobs:
+  get_metadata:
+    name: Get Metadata
+    runs-on: ubuntu-latest
+
+    outputs:
+      metadata: ${{ steps.env_setup.outputs.metadata }}
+      tag: ${{ steps.env_setup.outputs.tag-value }}
+
+    steps:
+      - name: Environment Setup
+        id: env_setup
+        run: |
+          # Access Built-in Variables using GitHub actions expression
+          echo "Workflow Name: ${{ github.workflow }}"
+          echo "Current Job ID: ${{ github.job }}"
+          echo "Run Number: ${{ github.run_number }}"
+
+          echo "Reference Name: ${{ github.ref }}"
+          echo "Ref Short Name: ${{ github.ref_name }}"
+          echo "Source Branch: ${{ github.head_ref }}"
+          echo "Target Branch: ${{ github.base_ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Code Checkout Directory: ${{ github.workspace }}"
+
+          # Access shell variable
+          echo "Busienss Unit: $BUSINESS_UNIT"
+
+          # Construct metadata values
+          echo "metadata=$BUSINESS_UNIT-$TEAM-${{ github.job }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
+          echo "tag-value=${{ github.run_number }}-${{ github.sha }}" >> $GITHUB_OUTPUT
+
+        env:
+          TEAM: platform
+
+      - name: Display Metadata
+        run: |
+          echo "Metadata: ${{ steps.env_setup.outputs.metadata }}"
+          echo "Tag Value: ${{ steps.env_setup.outputs.tag-value }}"
