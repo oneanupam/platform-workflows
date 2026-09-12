@@ -1,0 +1,17 @@
+name: PR Checks
+on:
+  push:
+    branches:
+      - main
+      - release/*
+  pull_request:
+    branches:
+      - main
+      - release/*
+jobs:
+  trufflehog_scan:
+    name: TruffleHog Scan
+    uses: ./.github/workflows/trufflehog-scan.yml
+    with:
+      tag: test
+      metadat: test
